@@ -1,3 +1,4 @@
+#!/bin/sh
 # Build the Phoenix client driver, including applying patches
 # to make it compatible with JMeter.
 
@@ -53,6 +54,7 @@ fi
 echo "Building Phoenix Client"
 (cd phoenix && mvn package -DskipTests -Dhadoop.profile=2 > /dev/null)
 
-# Bring the client JAR into the top level directory.
+# Bring some JARs into the top level directory.
 cp phoenix/phoenix-assembly/target/phoenix*client.jar .
+tar --strip-components=2 -zxf phoenix/phoenix-assembly/target/phoenix-4.2.0.tar.gz '*-compat-*'
 echo "Driver built and copied to base directory."
