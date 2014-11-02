@@ -22,34 +22,49 @@ if [ X"$DIR" = "X" ]; then
 	DIR=/tmp/phoenix-generate
 fi
 
-# Check for the data I need.
-hdfs dfs -ls ${DIR}/${SCALE}/store_sales > /dev/null
-if [ $? -ne 0 ]; then
-	echo "Store Sales data is not generated"
-	exit 1
-fi
-hdfs dfs -ls ${DIR}/${SCALE}/date_dim > /dev/null
-if [ $? -ne 0 ]; then
-	echo "Date data is not generated"
-	exit 1
-fi
-
 # Create the tables in Phoenix.
 echo "Creating tables in Phoenix"
 psql.py ${ZOOKEEPER} ddl/CreateTables.sql
 
-# Run the bulk load for Store Sales.
+# Bulk load the tables.
 set -x
-echo "Loading STORE_SALES"
-INPUT=${DIR}/${SCALE}/store_sales/store_sales/data-m-00001
-export LIBJARS=hbase-hadoop-compat*.jar,hbase-hadoop2-compat*.jar
-export LIBJARS=hbase-hadoop-compat-0.98.4-hadoop2.jar,hbase-hadoop2-compat-0.98.4-hadoop2.jar
-export HADOOP_CLASSPATH=/usr/hdp/2.2.0.0-854/hbase/lib/hbase-protocol.jar
-hadoop jar phoenix*client.jar \
+
+# Variables we need.
+HADOOP_COMPAT=$(ls hbase-hadoop-compat*.jar)
+HADOOP2_COMPAT=$(ls hbase-hadoop-compat*.jar)
+export LIBJARS=$HADOOP_COMPAT,$HADOOP2_COMPAT
+
+# XXX: This needs to get fixed!
+export HADOOP_CLASSPATH=/etc/hbase/conf:/usr/hdp/2.2.0.0-854/hbase/lib/hbase-protocol.jar
+
+TABLES="store_sales date_dim"
+TABLES=""
+for t in $TABLES; do
+	echo "Loading $t"
+	hdfs dfs -ls ${DIR}/${SCALE}/${t} > /dev/null
+	if [ $? -ne 0 ]; then
+		echo "$t data is not generated"
+		exit 1
+	fi
+	UCT=`echo $t | tr '[:lower:]' '[:upper:]'`
+	INPUT=${DIR}/${SCALE}/${t}/${t}
+	hadoop jar phoenix-4.2.0-client.jar \
+		org.apache.phoenix.mapreduce.CsvBulkLoadTool \
+		-libjars ${LIBJARS} \
+		--table ${UCT} \
+		--input ${INPUT} \
+		--zookeeper=${ZOOKEEPER} \
+		-g \
+		-d '|'
+done
+
+# Load date dimension. Needed a special hack to work around date requiring time.
+hadoop fs -copyFromLocal data/date_dim.txt /tmp
+hadoop jar phoenix-4.2.0-client.jar \
 	org.apache.phoenix.mapreduce.CsvBulkLoadTool \
 	-libjars ${LIBJARS} \
-	--table STORE_SALES \
-	--input ${INPUT} \
-	-d '|' \
-	--zookeeper=${ZOOKEEPER}
-
+	--table DATE_DIM \
+	--input /tmp/date_dim.txt \
+	--zookeeper=${ZOOKEEPER} \
+	-g \
+	-d '|'
