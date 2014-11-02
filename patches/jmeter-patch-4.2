@@ -1,0 +1,38 @@
+diff -rupN phoenix-core/src/main/java/org/apache/phoenix/jdbc/PhoenixPreparedStatement.java phoenix-core.new/src/main/java/org/apache/phoenix/jdbc/PhoenixPreparedStatement.java
+--- phoenix-core/src/main/java/org/apache/phoenix/jdbc/PhoenixPreparedStatement.java	2014-11-02 02:32:38.594879980 -0800
++++ phoenix-core.new/src/main/java/org/apache/phoenix/jdbc/PhoenixPreparedStatement.java	2014-11-02 02:30:03.867638639 -0800
+@@ -39,6 +39,7 @@ import java.sql.SQLFeatureNotSupportedEx
+ import java.sql.SQLXML;
+ import java.sql.Time;
+ import java.sql.Timestamp;
++import java.sql.Types;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.BitSet;
+@@ -433,7 +434,11 @@ public class PhoenixPreparedStatement ex
+     public void setObject(int parameterIndex, Object o, int targetSqlType) throws SQLException {
+         PDataType targetType = PDataType.fromTypeId(targetSqlType);
+         PDataType sourceType = PDataType.fromLiteral(o);
+-        o = targetType.toObject(o, sourceType);
++        if (o instanceof String && targetSqlType == Types.INTEGER) {
++            o = Integer.valueOf((String)o);
++        } else {
++            o = targetType.toObject(o, sourceType);
++        }
+         setParameter(parameterIndex, o);
+     }
+ 
+diff -rupN phoenix-core/src/main/java/org/apache/phoenix/jdbc/PhoenixStatement.java phoenix-core.new/src/main/java/org/apache/phoenix/jdbc/PhoenixStatement.java
+--- phoenix-core/src/main/java/org/apache/phoenix/jdbc/PhoenixStatement.java	2014-11-02 02:32:38.594879980 -0800
++++ phoenix-core.new/src/main/java/org/apache/phoenix/jdbc/PhoenixStatement.java	2014-11-02 02:31:10.569449399 -0800
+@@ -1219,7 +1219,9 @@ public class PhoenixStatement implements
+     @Override
+     public void setQueryTimeout(int seconds) throws SQLException {
+         // The Phoenix setting for this is shared across all connections currently
+-        throw new SQLFeatureNotSupportedException();
++        // throw new SQLFeatureNotSupportedException();
++        // JMeter will call this, just ignore it.
++        return;
+     }
+ 
+     @Override
