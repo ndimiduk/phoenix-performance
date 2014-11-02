@@ -27,7 +27,6 @@ echo "Creating tables in Phoenix"
 psql.py ${ZOOKEEPER} ddl/CreateTables.sql
 
 # Bulk load the tables.
-set -x
 
 # Variables we need.
 HADOOP_COMPAT=$(ls hbase-hadoop-compat*.jar)
@@ -37,8 +36,7 @@ export LIBJARS=$HADOOP_COMPAT,$HADOOP2_COMPAT
 # XXX: This needs to get fixed!
 export HADOOP_CLASSPATH=/etc/hbase/conf:/usr/hdp/2.2.0.0-854/hbase/lib/hbase-protocol.jar
 
-TABLES="store_sales date_dim"
-TABLES=""
+TABLES="store_sales"
 for t in $TABLES; do
 	echo "Loading $t"
 	hdfs dfs -ls ${DIR}/${SCALE}/${t} > /dev/null
