@@ -34,25 +34,22 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+# Create the tables in Phoenix.
+echo "Creating tables in Phoenix"
+psql.py ${ZOOKEEPER} ddl/CreateTables.sql
+
 # Run the bulk load for Store Sales.
 set -x
 echo "Loading STORE_SALES"
 INPUT=${DIR}/${SCALE}/store_sales/store_sales/data-m-00001
-
-#hadoop jar phoenix*client.jar \
-#	org.apache.phoenix.mapreduce.CsvBulkLoadTool \
-#	-libjars ${LIBJARS} \
-#	--table STORE_SALES \
-#	--input ${INPUT} \
-#	-d '|' \
-#	--zookeeper=${ZOOKEEPER}
-
 export LIBJARS=hbase-hadoop-compat*.jar,hbase-hadoop2-compat*.jar
+export LIBJARS=hbase-hadoop-compat-0.98.4-hadoop2.jar,hbase-hadoop2-compat-0.98.4-hadoop2.jar
+export HADOOP_CLASSPATH=/usr/hdp/2.2.0.0-854/hbase/lib/hbase-protocol.jar
 hadoop jar phoenix*client.jar \
 	org.apache.phoenix.mapreduce.CsvBulkLoadTool \
+	-libjars ${LIBJARS} \
 	--table STORE_SALES \
 	--input ${INPUT} \
 	-d '|' \
 	--zookeeper=${ZOOKEEPER}
-
 
