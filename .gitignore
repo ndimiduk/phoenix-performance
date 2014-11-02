@@ -1,3 +1,4 @@
 apache-maven*
 phoenix
 phoenix*.jar
+hbase*.jar
