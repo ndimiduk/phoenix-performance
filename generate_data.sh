@@ -61,10 +61,10 @@ echo "Building TPC-DS Data Generator"
 (cd tpcds-gen; make)
 echo "TPC-DS Data Generator built, generating data"
 
-# Cap parallelism at 30k
+# Cap parallelism at 5k
 PARALLEL=$SCALE
-if [ $SCALE -gt 30000 ]; then
-	PARALLEL=30000
+if [ $SCALE -gt 5000 ]; then
+	PARALLEL=5000
 fi
 
 hdfs dfs -mkdir -p ${DIR}
