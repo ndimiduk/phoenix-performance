@@ -61,20 +61,28 @@ echo "Building TPC-DS Data Generator"
 (cd tpcds-gen; make)
 echo "TPC-DS Data Generator built, generating data"
 
+# Cap parallelism at 30k
+PARALLEL=$SCALE
+if [ $SCALE -gt 30000 ]; then
+	PARALLEL=30000
+fi
+
 hdfs dfs -mkdir -p ${DIR}
 hdfs dfs -ls ${DIR}/${SCALE}/store_sales > /dev/null
 if [ $? -ne 0 ]; then
 	echo "Generating store sales data at scale factor $SCALE."
-	(cd tpcds-gen; hadoop jar target/*.jar -d ${DIR}/${SCALE}/store_sales -s ${SCALE} -t store_sales)
+	(cd tpcds-gen; hadoop jar target/*.jar -d ${DIR}/${SCALE}/store_sales -s ${SCALE} -p ${PARALLEL} -t store_sales)
 fi
-hdfs dfs -ls ${DIR}/${SCALE}/date_dim > /dev/null
-if [ $? -ne 0 ]; then
-	echo "Generating date dim data."
-	(cd tpcds-gen; hadoop jar target/*.jar -d ${DIR}/${SCALE}/date_dim -s ${SCALE} -t date_dim)
-fi
-hdfs dfs -ls ${DIR}/${SCALE}/store_sales > /dev/null
-if [ $? -ne 0 ]; then
-	echo "Data generation failed, exiting."
-	exit 1
-fi
+
+# Disabled because of a problem with the DATE datatype.
+#hdfs dfs -ls ${DIR}/${SCALE}/date_dim > /dev/null
+#if [ $? -ne 0 ]; then
+#	echo "Generating date dim data."
+#	(cd tpcds-gen; hadoop jar target/*.jar -d ${DIR}/${SCALE}/date_dim -s ${SCALE} -t date_dim)
+#fi
+#hdfs dfs -ls ${DIR}/${SCALE}/store_sales > /dev/null
+#if [ $? -ne 0 ]; then
+#	echo "Data generation failed, exiting."
+#	exit 1
+#fi
 echo "Data generation complete."
