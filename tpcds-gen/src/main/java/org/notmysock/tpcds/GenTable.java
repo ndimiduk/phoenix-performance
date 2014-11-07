@@ -191,7 +191,7 @@ public class GenTable extends Configured implements Tool {
         int status = p.waitFor();
         if(status != 0) {
           String err = readToString(p.getErrorStream());
-          throw new InterruptedException("Process failed with status code " + status + "\n" + err);
+          throw new InterruptedException(cmd + " failed with status code " + status + "\n" + err);
         }
 
         File cwd = new File(".");
