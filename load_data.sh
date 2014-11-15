@@ -3,6 +3,12 @@
 # Use the Phoenix bulk loader to load data.
 # Data needs to have been generated using generate_data.sh prior to this step.
 
+PSQL=phoenix/bin/psql.py
+PSQL=/usr/hdp/current/phoenix-client/bin/psql.py
+
+CLIENT=phoenix-4.2.0-client.jar
+CLIENT=/usr/hdp/current/phoenix-client/phoenix-client.jar
+
 function usage {
 	echo "Usage: load_data.sh scale_factor zk [temp_directory]"
 	echo "Ex: load_data.sh 10 sandbox.hortonworks.com:2181:/hbase-unsecure"
@@ -24,17 +30,17 @@ fi
 
 # Create the tables in Phoenix.
 echo "Creating tables in Phoenix"
-psql.py ${ZOOKEEPER} ddl/CreateTables.sql
+${PSQL} ${ZOOKEEPER} ddl/CreateTables.sql
 
 # Bulk load the tables.
 
 # Variables we need.
 HADOOP_COMPAT=$(ls hbase-hadoop-compat*.jar)
-HADOOP2_COMPAT=$(ls hbase-hadoop-compat*.jar)
+HADOOP2_COMPAT=$(ls hbase-hadoop2-compat*.jar)
+HADOOP_COMPAT=/usr/hdp/current/hbase-client/lib/hbase-hadoop-compat.jar
+HADOOP2_COMPAT=/usr/hdp/current/hbase-client/lib/hbase-hadoop2-compat.jar
 export LIBJARS=$HADOOP_COMPAT,$HADOOP2_COMPAT
-
-# XXX: This needs to get fixed!
-export HADOOP_CLASSPATH=/etc/hbase/conf:/usr/hdp/2.2.0.0-854/hbase/lib/hbase-protocol.jar
+export HADOOP_CLASSPATH=/etc/hbase/conf:/usr/hdp/current/hbase-client/lib/hbase-protocol.jar
 
 TABLES="store_sales"
 for t in $TABLES; do
@@ -46,7 +52,7 @@ for t in $TABLES; do
 	fi
 	UCT=`echo $t | tr '[:lower:]' '[:upper:]'`
 	INPUT=${DIR}/${SCALE}/${t}/${t}
-	hadoop jar phoenix-4.2.0-client.jar \
+	hadoop jar ${CLIENT} \
 		org.apache.phoenix.mapreduce.CsvBulkLoadTool \
 		-libjars ${LIBJARS} \
 		--table ${UCT} \
@@ -58,7 +64,7 @@ done
 
 # Load date dimension. Needed a special hack to work around date requiring time.
 hadoop fs -copyFromLocal data/date_dim.txt /tmp
-hadoop jar phoenix-4.2.0-client.jar \
+hadoop jar ${CLIENT} \
 	org.apache.phoenix.mapreduce.CsvBulkLoadTool \
 	-libjars ${LIBJARS} \
 	--table DATE_DIM \

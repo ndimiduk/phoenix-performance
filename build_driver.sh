@@ -3,6 +3,7 @@
 # to make it compatible with JMeter.
 
 BRANCH=4.2
+TAG=v4.2.0
 
 # Check for all the stuff I need to function.
 for f in javac; do
@@ -41,7 +42,9 @@ fi
 echo "Downloading Phoenix source code"
 rm -rf phoenix
 git clone https://github.com/apache/phoenix 2> /dev/null
-( cd phoenix && git checkout -b $BRANCH remotes/origin/$BRANCH > /dev/null )
+
+echo "Will build version $TAG"
+( cd phoenix && git checkout $TAG > /dev/null )
 
 # Apply patches.
 FILE=jmeter-patch-$BRANCH
