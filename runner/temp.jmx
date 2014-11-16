@@ -15,10 +15,10 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">VAR_REQUESTS_PER_THREAD</stringProp>
+          <stringProp name="LoopController.loops">1500</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">VAR_NUM_THREADS</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">VAR_RAMP_TIME</stringProp>
+        <stringProp name="ThreadGroup.num_threads">4</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <longProp name="ThreadGroup.start_time">1414873282000</longProp>
         <longProp name="ThreadGroup.end_time">1414873282000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -29,9 +29,9 @@
       <hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
           <stringProp name="dataSource">pool</stringProp>
-          <stringProp name="query">select * from store_sales where ss_item_sk = ? and ss_store_sk=? and ss_promo_sk=?</stringProp>
-          <stringProp name="queryArguments">${item},${store},${promo}</stringProp>
-          <stringProp name="queryArgumentsTypes">INTEGER,INTEGER,INTEGER</stringProp>
+          <stringProp name="query">select * from store_sales where ss_item_sk = ? and ss_ticket_number=?</stringProp>
+          <stringProp name="queryArguments">${item},${ticket}</stringProp>
+          <stringProp name="queryArgumentsTypes">INTEGER,INTEGER</stringProp>
           <stringProp name="queryTimeout"></stringProp>
           <stringProp name="queryType">Prepared Select Statement</stringProp>
           <stringProp name="resultVariable"></stringProp>
@@ -48,19 +48,19 @@
           <boolProp name="keepAlive">false</boolProp>
           <stringProp name="connectionAge">1000</stringProp>
           <stringProp name="checkQuery">select 1 from SYSTEM.CATALOG limit 1</stringProp>
-          <stringProp name="dbUrl">jdbc:phoenix:VAR_ZOOKEEPER_QUORUM</stringProp>
+          <stringProp name="dbUrl">jdbc:phoenix:cluster1:2181:/hbase-unsecure</stringProp>
           <stringProp name="driver">org.apache.phoenix.jdbc.PhoenixDriver</stringProp>
           <stringProp name="username"></stringProp>
           <stringProp name="password"></stringProp>
         </JDBCDataSource>
         <hashTree/>
-        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_store_sk" enabled="true">
-          <stringProp name="maximumValue">22</stringProp>
+        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_ticket_number" enabled="true">
+          <stringProp name="maximumValue">500000</stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <boolProp name="perThread">false</boolProp>
           <stringProp name="randomSeed"></stringProp>
-          <stringProp name="variableName">store</stringProp>
+          <stringProp name="variableName">ticket</stringProp>
         </RandomVariableConfig>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_item_sk" enabled="true">
@@ -68,15 +68,6 @@
           <stringProp name="outputFormat"></stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="maximumValue">26000</stringProp>
-          <stringProp name="randomSeed"></stringProp>
-          <boolProp name="perThread">false</boolProp>
-        </RandomVariableConfig>
-        <hashTree/>
-        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_promo_sk" enabled="true">
-          <stringProp name="variableName">promo</stringProp>
-          <stringProp name="outputFormat"></stringProp>
-          <stringProp name="minimumValue">1</stringProp>
-          <stringProp name="maximumValue">322</stringProp>
           <stringProp name="randomSeed"></stringProp>
           <boolProp name="perThread">false</boolProp>
         </RandomVariableConfig>
