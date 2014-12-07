@@ -1,4 +1,6 @@
 apache-maven*
+apache-jmeter*
 phoenix
 phoenix*.jar
 hbase*.jar
+tpcds-gen/*.o
