@@ -92,7 +92,7 @@ select * from store_sales where ss_ticket_number=? and ss_store_sk=?
               <assertions>false</assertions>
               <subresults>false</subresults>
               <responseData>false</responseData>
-              <samplerData>false</samplerData>
+              <samplerData>true</samplerData>
               <xml>true</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>

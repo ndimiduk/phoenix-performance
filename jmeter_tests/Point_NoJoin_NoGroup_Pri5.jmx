@@ -57,19 +57,19 @@ select * from store_sales where ss_customer_sk=? and ss_ticket_number=?
         </JDBCDataSource>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_ticket_number" enabled="true">
-          <stringProp name="maximumValue">22</stringProp>
+          <stringProp name="maximumValue">144000</stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <boolProp name="perThread">false</boolProp>
           <stringProp name="randomSeed"></stringProp>
-          <stringProp name="variableName">store</stringProp>
+          <stringProp name="variableName">customer</stringProp>
         </RandomVariableConfig>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_item_sk" enabled="true">
-          <stringProp name="variableName">customer</stringProp>
+          <stringProp name="variableName">ticket</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <stringProp name="minimumValue">1</stringProp>
-          <stringProp name="maximumValue">144000</stringProp>
+          <stringProp name="maximumValue">480000</stringProp>
           <stringProp name="randomSeed"></stringProp>
           <boolProp name="perThread">false</boolProp>
         </RandomVariableConfig>
@@ -92,7 +92,7 @@ select * from store_sales where ss_customer_sk=? and ss_ticket_number=?
               <assertions>false</assertions>
               <subresults>false</subresults>
               <responseData>false</responseData>
-              <samplerData>false</samplerData>
+              <samplerData>true</samplerData>
               <xml>true</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>

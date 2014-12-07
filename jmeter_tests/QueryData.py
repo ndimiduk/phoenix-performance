@@ -55,7 +55,7 @@ select * from store_sales where ss_ticket_number=? and ss_store_sk=?
 		"TEMPLATE_VAR2_NAME": "ticket",
 		"TEMPLATE_VAR2_MIN":  "1",
 		"TEMPLATE_VAR2_MAX":  "480000",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 
@@ -68,13 +68,13 @@ select * from store_sales where ss_ticket_number=? and ss_customer_sk=?
 """,
 		"TEMPLATE_ARGUMENTS": "${ticket},${customer}",
 		"TEMPLATE_TYPES": "INTEGER,INTEGER",
-		"TEMPLATE_VAR1_NAME": "store",
+		"TEMPLATE_VAR1_NAME": "ticket",
 		"TEMPLATE_VAR1_MIN":  "1",
-		"TEMPLATE_VAR1_MAX":  "22",
+		"TEMPLATE_VAR1_MAX":  "480000",
 		"TEMPLATE_VAR2_NAME": "customer",
 		"TEMPLATE_VAR2_MIN":  "1",
 		"TEMPLATE_VAR2_MAX":  "144000",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 
@@ -87,13 +87,13 @@ select * from store_sales where ss_customer_sk=? and ss_ticket_number=?
 """,
 		"TEMPLATE_ARGUMENTS": "${customer},${ticket}",
 		"TEMPLATE_TYPES": "INTEGER,INTEGER",
-		"TEMPLATE_VAR1_NAME": "store",
+		"TEMPLATE_VAR1_NAME": "customer",
 		"TEMPLATE_VAR1_MIN":  "1",
-		"TEMPLATE_VAR1_MAX":  "22",
-		"TEMPLATE_VAR2_NAME": "customer",
+		"TEMPLATE_VAR1_MAX":  "144000",
+		"TEMPLATE_VAR2_NAME": "ticket",
 		"TEMPLATE_VAR2_MIN":  "1",
-		"TEMPLATE_VAR2_MAX":  "144000",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_VAR2_MAX":  "480000",
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 
@@ -104,15 +104,15 @@ select * from store_sales where ss_customer_sk=? and ss_ticket_number=?
 		"TEMPLATE_QUERY": """
 select * from store_sales where ss_ticket_number=? and ss_cdemo_sk=?
 """,
-		"TEMPLATE_ARGUMENTS": "${customer},${cdemo}",
+		"TEMPLATE_ARGUMENTS": "${ticket},${cdemo}",
 		"TEMPLATE_TYPES": "INTEGER,INTEGER",
-		"TEMPLATE_VAR1_NAME": "store",
+		"TEMPLATE_VAR1_NAME": "ticket",
 		"TEMPLATE_VAR1_MIN":  "1",
-		"TEMPLATE_VAR1_MAX":  "22",
+		"TEMPLATE_VAR1_MAX":  "480000",
 		"TEMPLATE_VAR2_NAME": "cdemo",
 		"TEMPLATE_VAR2_MIN":  "1",
 		"TEMPLATE_VAR2_MAX":  "1000000",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 
@@ -123,15 +123,15 @@ select * from store_sales where ss_ticket_number=? and ss_cdemo_sk=?
 		"TEMPLATE_QUERY": """
 select * from store_sales where ss_ticket_number=? and ss_hdemo_sk=?
 """,
-		"TEMPLATE_ARGUMENTS": "${customer},${hdemo}",
+		"TEMPLATE_ARGUMENTS": "${ticket},${hdemo}",
 		"TEMPLATE_TYPES": "INTEGER,INTEGER",
-		"TEMPLATE_VAR1_NAME": "store",
+		"TEMPLATE_VAR1_NAME": "ticket",
 		"TEMPLATE_VAR1_MIN":  "1",
-		"TEMPLATE_VAR1_MAX":  "22",
+		"TEMPLATE_VAR1_MAX":  "480000",
 		"TEMPLATE_VAR2_NAME": "hdemo",
 		"TEMPLATE_VAR2_MIN":  "1",
 		"TEMPLATE_VAR2_MAX":  "7200",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 
@@ -142,15 +142,15 @@ select * from store_sales where ss_ticket_number=? and ss_hdemo_sk=?
 		"TEMPLATE_QUERY": """
 select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
 """,
-		"TEMPLATE_ARGUMENTS": "${customer},${cost}",
+		"TEMPLATE_ARGUMENTS": "${ticket},${cost}",
 		"TEMPLATE_TYPES": "INTEGER,FLOAT",
-		"TEMPLATE_VAR1_NAME": "store",
+		"TEMPLATE_VAR1_NAME": "ticket",
 		"TEMPLATE_VAR1_MIN":  "1",
-		"TEMPLATE_VAR1_MAX":  "22",
-		"TEMPLATE_VAR2_NAME": "hdemo",
+		"TEMPLATE_VAR1_MAX":  "480000",
+		"TEMPLATE_VAR2_NAME": "cost",
 		"TEMPLATE_VAR2_MIN":  "1",
 		"TEMPLATE_VAR2_MAX":  "100",
-		"TEMPLATE_SAMPLER":   "false"
+		"TEMPLATE_SAMPLER":   "true"
 	}
 },
 

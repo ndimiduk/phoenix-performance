@@ -32,7 +32,7 @@
           <stringProp name="query">
 select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
 </stringProp>
-          <stringProp name="queryArguments">${customer},${cost}</stringProp>
+          <stringProp name="queryArguments">${ticket},${cost}</stringProp>
           <stringProp name="queryArgumentsTypes">INTEGER,FLOAT</stringProp>
           <stringProp name="queryTimeout"></stringProp>
           <stringProp name="queryType">Prepared Select Statement</stringProp>
@@ -57,16 +57,16 @@ select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
         </JDBCDataSource>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_ticket_number" enabled="true">
-          <stringProp name="maximumValue">22</stringProp>
+          <stringProp name="maximumValue">480000</stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <boolProp name="perThread">false</boolProp>
           <stringProp name="randomSeed"></stringProp>
-          <stringProp name="variableName">store</stringProp>
+          <stringProp name="variableName">ticket</stringProp>
         </RandomVariableConfig>
         <hashTree/>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_item_sk" enabled="true">
-          <stringProp name="variableName">hdemo</stringProp>
+          <stringProp name="variableName">cost</stringProp>
           <stringProp name="outputFormat"></stringProp>
           <stringProp name="minimumValue">1</stringProp>
           <stringProp name="maximumValue">100</stringProp>
@@ -92,7 +92,7 @@ select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
               <assertions>false</assertions>
               <subresults>false</subresults>
               <responseData>false</responseData>
-              <samplerData>false</samplerData>
+              <samplerData>true</samplerData>
               <xml>true</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>
