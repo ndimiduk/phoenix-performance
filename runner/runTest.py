@@ -20,7 +20,7 @@ def runJmeter():
 	runCommand(testJmeter, "JMeter is not properly deployed on all nodes")
 
 	# Clean up prior runs.
-	cleanupJmeter = 'pdsh -S -w ^' + TESTHOSTS + ' "rm -f jmeter.log output.csv root.log"'
+	cleanupJmeter = 'pdsh -S -w ^' + TESTHOSTS + ' "rm -f jmeter.log output.xml root.log"'
 	runCommand(cleanupJmeter, "Cleanup failed")
 
 	# Deploy the temp JMX on all nodes.
@@ -33,7 +33,7 @@ def runJmeter():
 
 def analyzeOutput():
 	# Bring the various output files local.
-	bringFiles = 'rpdcp -w ^' + TESTHOSTS + ' output.csv .'
+	bringFiles = 'rpdcp -w ^' + TESTHOSTS + ' output.xml .'
 	runCommand(bringFiles, "Failed to retrieve JMeter results")
 
 	# Run the analysis.
@@ -47,7 +47,7 @@ def main():
 		print str(err)
 		sys.exit(2)
 	input = None
-	output = "output.csv"
+	output = "output.xml"
 	variables = []
 	for o, a in opts:
 		if o == "-i":

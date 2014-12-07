@@ -1,8 +1,18 @@
 #!/bin/sh
 
+# Sanity checking.
+if [ X"$0" = "X" ]; then
+	echo "Usage: $0 [JMX Path]"
+	exit 1
+fi
+if [ ! -f $1 ]; then
+	echo "$1 does not exist"
+	exit 1
+fi
+
 # Semi point lookups.
 python runTest.py \
-	-i ../jmeter_tests/Phoenix_StoreSales_Purepoint.jmx \
+	-i $1 \
 	-v VAR_REQUESTS_PER_THREAD=1500 \
 	-v VAR_NUM_THREADS=4 \
 	-v VAR_RAMP_TIME=1 \

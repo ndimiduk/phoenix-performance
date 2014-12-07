@@ -29,7 +29,9 @@
       <hashTree>
         <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
           <stringProp name="dataSource">pool</stringProp>
-          <stringProp name="query">select * from store_sales where ss_item_sk = ? and ss_ticket_number=?</stringProp>
+          <stringProp name="query">
+select * from store_sales where ss_item_sk = ? and ss_ticket_number=?
+</stringProp>
           <stringProp name="queryArguments">${item},${ticket}</stringProp>
           <stringProp name="queryArgumentsTypes">INTEGER,INTEGER</stringProp>
           <stringProp name="queryTimeout"></stringProp>
@@ -87,11 +89,11 @@
               <threadName>true</threadName>
               <dataType>false</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>false</samplerData>
-              <xml>false</xml>
+              <xml>true</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>
               <requestHeaders>false</requestHeaders>
@@ -101,7 +103,7 @@
               <bytes>true</bytes>
             </value>
           </objProp>
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">output.xml</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
