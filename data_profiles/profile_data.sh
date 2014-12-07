@@ -1,0 +1,14 @@
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[0], "\n"' | sort -n | uniq > date_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[1], "\n"' | sort -n | uniq > time_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[2], "\n"' | sort -n | uniq > item_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[3], "\n"' | sort -n | uniq > customer_sk.txt
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[4], "\n"' | sort -n | uniq > cdemo_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[5], "\n"' | sort -n | uniq > hdemo_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[6], "\n"' | sort -n | uniq > addr_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[7], "\n"' | sort -n | uniq > store_sk.txt
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[8], "\n"' | sort -n | uniq > promo_sk.txt & 
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[9], "\n"' | sort -n | uniq > ticket_number.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[10], "\n"' | sort -n | uniq > promo_sk.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[11], "\n"' | sort -n | uniq > wholesale_cost.txt
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[12], "\n"' | sort -n | uniq > list_price.txt &
+cat data-m-00001 | perl -ne '@x = split("\\|"); print $x[13], "\n"' | sort -n | uniq > sales_price.txt
