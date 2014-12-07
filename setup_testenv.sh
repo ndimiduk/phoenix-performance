@@ -31,7 +31,9 @@ if [ $SKIP -ne 1 ]; then
 fi
 
 # Copy to our test machines.
+BASEDIR=/tmp/phoenix-performance
 echo "Deploying JMeter to all hosts specified in testshosts"
-pdcp -w ^testhosts $FILE /tmp
-pdsh -w ^testhosts "cd /tmp; tar -xzf $FILE"
-pdcp -w ^testhosts phoenix*client.jar /tmp/apache-jmeter-*/lib
+pdsh -w ^testhosts "mkdir -p $BASEDIR"
+pdcp -w ^testhosts $FILE $BASEDIR
+pdsh -w ^testhosts "cd $BASEDIR; tar -xzf $FILE"
+pdcp -w ^testhosts phoenix*client.jar $BASEDIR/apache-jmeter-*/lib
