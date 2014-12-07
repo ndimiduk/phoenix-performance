@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.6" jmeter="2.11.20141101">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Phoenix" enabled="true">
+      <stringProp name="TestPlan.comments">First Try</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Database Users" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">VAR_REQUESTS_PER_THREAD</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">VAR_NUM_THREADS</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">VAR_RAMP_TIME</stringProp>
+        <longProp name="ThreadGroup.start_time">1414873282000</longProp>
+        <longProp name="ThreadGroup.end_time">1414873282000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.delayedStart">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="BS_RandStartEndDate" enabled="true">
+          <stringProp name="BeanShellSampler.query">import java.util.*;
+
+int yearMin = 1998;
+int yearMax = 1999;
+
+Random r = new Random();
+
+GregorianCalendar gc = new GregorianCalendar();
+int year = yearMin + r.nextInt(yearMax - yearMin);
+gc.set(gc.YEAR, year);
+int dayOfYear = 1 + r.nextInt(gc.getActualMaximum(gc.DAY_OF_YEAR)-1);
+gc.set(gc.DAY_OF_YEAR, dayOfYear);
+
+String startDate = gc.get(gc.YEAR) + &quot;-&quot; + gc.get(gc.MONTH) + &quot;-&quot; + gc.get(gc.DAY_OF_MONTH) + &quot; 00:00:00&quot;;
+gc.add(Calendar.DAY_OF_MONTH, 1);
+String endDate = gc.get(gc.YEAR) + &quot;-&quot; + gc.get(gc.MONTH) + &quot;-&quot; + gc.get(gc.DAY_OF_MONTH) + &quot; 00:00:00&quot;;
+
+vars.put(&quot;start&quot;, startDate);
+vars.put(&quot;end&quot;, endDate);</stringProp>
+          <stringProp name="BeanShellSampler.filename"></stringProp>
+          <stringProp name="BeanShellSampler.parameters"></stringProp>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
+          <stringProp name="dataSource">pool</stringProp>
+          <stringProp name="query">select
+	sum(ss_net_profit)
+from
+	store_sales
+	join date_dim on store_sales.ss_sold_date_sk = date_dim.d_date_sk
+where
+	date_dim.d_date between to_date(?) and to_date(?)
+group by
+	ss_store_sk</stringProp>
+          <stringProp name="queryArguments">${start},${end}</stringProp>
+          <stringProp name="queryArgumentsTypes">VARCHAR,VARCHAR</stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Prepared Select Statement</stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
+          <stringProp name="dataSource">pool</stringProp>
+          <stringProp name="poolMax">VAR_POOL_MAX</stringProp>
+          <stringProp name="timeout">1000</stringProp>
+          <stringProp name="trimInterval">1000</stringProp>
+          <boolProp name="autocommit">false</boolProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <boolProp name="keepAlive">false</boolProp>
+          <stringProp name="connectionAge">1000</stringProp>
+          <stringProp name="checkQuery">select 1 from SYSTEM.CATALOG limit 1</stringProp>
+          <stringProp name="dbUrl">jdbc:phoenix:VAR_ZOOKEEPER_QUORUM</stringProp>
+          <stringProp name="driver">org.apache.phoenix.jdbc.PhoenixDriver</stringProp>
+          <stringProp name="username"></stringProp>
+          <stringProp name="password"></stringProp>
+        </JDBCDataSource>
+        <hashTree/>
+        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>false</label>
+              <code>false</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>false</dataType>
+              <encoding>false</encoding>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
+              <responseData>false</responseData>
+              <samplerData>true</samplerData>
+              <xml>true</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+            </value>
+          </objProp>
+          <stringProp name="filename">output.xml</stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

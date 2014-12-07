@@ -40,7 +40,7 @@
         <hashTree/>
         <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
           <stringProp name="dataSource">pool</stringProp>
-          <stringProp name="poolMax">4</stringProp>
+          <stringProp name="poolMax">VAR_POOL_MAX</stringProp>
           <stringProp name="timeout">1000</stringProp>
           <stringProp name="trimInterval">1000</stringProp>
           <boolProp name="autocommit">false</boolProp>
@@ -87,11 +87,11 @@
               <threadName>true</threadName>
               <dataType>false</dataType>
               <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>false</samplerData>
-              <xml>false</xml>
+              <xml>true</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>
               <requestHeaders>false</requestHeaders>
@@ -101,7 +101,7 @@
               <bytes>true</bytes>
             </value>
           </objProp>
-          <stringProp name="filename">output.csv</stringProp>
+          <stringProp name="filename">output.xml</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

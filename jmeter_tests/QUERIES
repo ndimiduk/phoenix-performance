@@ -1,0 +1,10 @@
+# Joins.
+Phoenix_StoreSales_StoreDayAggGby.jmx		Sum of profit in all stores over a day's interval, grouped by store.
+Phoenix_StoreSales_StoreDayAggNoGby.jmx		Sum of profit in a store over a day's interval.
+Phoenix_StoreSales_ItemByDate.jmx		How many of a given item were sold on a given date?
+
+# No joins.
+Phoenix_StoreSales_AggTicket.jmx		Sum of net paid by ticket number.
+Phoenix_StoreSales_Purepoint.jmx		Select * based on item and ticket (i.e. the PK)
+Phoenix_StoreSales_Semipoint1.jmx		Select * based on item and store (i.e. first half of the PK)
+Phoenix_StoreSales_Semipoint2.jmx		Select * based on ticket and store (i.e. last half of the PK)
