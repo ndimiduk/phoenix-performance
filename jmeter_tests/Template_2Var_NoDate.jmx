@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.6" jmeter="2.11.20141101">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Phoenix" enabled="true">
+      <stringProp name="TestPlan.comments">First Try</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Database Users" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">VAR_REQUESTS_PER_THREAD</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">VAR_NUM_THREADS</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">VAR_RAMP_TIME</stringProp>
+        <longProp name="ThreadGroup.start_time">1414873282000</longProp>
+        <longProp name="ThreadGroup.end_time">1414873282000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.delayedStart">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="JDBC Request" enabled="true">
+          <stringProp name="dataSource">pool</stringProp>
+          <stringProp name="query">TEMPLATE_QUERY</stringProp>
+          <stringProp name="queryArguments">TEMPLATE_ARGUMENTS</stringProp>
+          <stringProp name="queryArgumentsTypes">TEMPLATE_TYPES</stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Prepared Select Statement</stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="JDBC Connection Configuration" enabled="true">
+          <stringProp name="dataSource">pool</stringProp>
+          <stringProp name="poolMax">VAR_POOL_MAX</stringProp>
+          <stringProp name="timeout">1000</stringProp>
+          <stringProp name="trimInterval">1000</stringProp>
+          <boolProp name="autocommit">false</boolProp>
+          <stringProp name="transactionIsolation">DEFAULT</stringProp>
+          <boolProp name="keepAlive">false</boolProp>
+          <stringProp name="connectionAge">1000</stringProp>
+          <stringProp name="checkQuery">select 1 from SYSTEM.CATALOG limit 1</stringProp>
+          <stringProp name="dbUrl">jdbc:phoenix:VAR_ZOOKEEPER_QUORUM</stringProp>
+          <stringProp name="driver">org.apache.phoenix.jdbc.PhoenixDriver</stringProp>
+          <stringProp name="username"></stringProp>
+          <stringProp name="password"></stringProp>
+        </JDBCDataSource>
+        <hashTree/>
+        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_ticket_number" enabled="true">
+          <stringProp name="maximumValue">TEMPLATE_VAR1_MAX</stringProp>
+          <stringProp name="minimumValue">TEMPLATE_VAR1_MIN</stringProp>
+          <stringProp name="outputFormat"></stringProp>
+          <boolProp name="perThread">false</boolProp>
+          <stringProp name="randomSeed"></stringProp>
+          <stringProp name="variableName">TEMPLATE_VAR1_NAME</stringProp>
+        </RandomVariableConfig>
+        <hashTree/>
+        <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random ss_item_sk" enabled="true">
+          <stringProp name="variableName">TEMPLATE_VAR2_NAME</stringProp>
+          <stringProp name="outputFormat"></stringProp>
+          <stringProp name="minimumValue">TEMPLATE_VAR2_MIN</stringProp>
+          <stringProp name="maximumValue">TEMPLATE_VAR2_MAX</stringProp>
+          <stringProp name="randomSeed"></stringProp>
+          <boolProp name="perThread">false</boolProp>
+        </RandomVariableConfig>
+        <hashTree/>
+        <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>false</label>
+              <code>false</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>false</dataType>
+              <encoding>false</encoding>
+              <assertions>false</assertions>
+              <subresults>false</subresults>
+              <responseData>false</responseData>
+              <samplerData>TEMPLATE_SAMPLER</samplerData>
+              <xml>true</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+            </value>
+          </objProp>
+          <stringProp name="filename">output.xml</stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

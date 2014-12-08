@@ -1,10 +1,81 @@
-# Joins.
-Phoenix_StoreSales_StoreDayAggGby.jmx		Sum of profit in all stores over a day's interval, grouped by store.
-Phoenix_StoreSales_StoreDayAggNoGby.jmx		Sum of profit in a store over a day's interval.
-Phoenix_StoreSales_ItemByDate.jmx		How many of a given item were sold on a given date?
+# FTS / Join / Group / NoIndex
 
-# No joins.
-Phoenix_StoreSales_AggTicket.jmx		Sum of net paid by ticket number.
-Phoenix_StoreSales_Purepoint.jmx		Select * based on item and ticket (i.e. the PK)
-Phoenix_StoreSales_Semipoint1.jmx		Select * based on item and store (i.e. first half of the PK)
-Phoenix_StoreSales_Semipoint2.jmx		Select * based on ticket and store (i.e. last half of the PK)
+# FTS / Join / Group / PrimaryIndex
+
+# FTS / Join / Group / SecondaryIndex
+
+# FTS / Join / NoGroup / NoIndex
+
+# FTS / Join / NoGroup / PrimaryIndex
+
+# FTS / Join / NoGroup / SecondaryIndex
+
+# FTS / NoJoin / Group / NoIndex
+
+# FTS / NoJoin / Group / PrimaryIndex
+
+# FTS / NoJoin / Group / SecondaryIndex
+
+# FTS / NoJoin / NoGroup / NoIndex
+
+# FTS / NoJoin / NoGroup / PrimaryIndex
+
+# FTS / NoJoin / NoGroup / SecondaryIndex
+
+# Range / Join / Group / NoIndex
+Phoenix_ItemDayCount.jmx		How many of a given item were sold on a given date?
+
+# Range / Join / Group / PrimaryIndex
+Phoenix_StoreDayAggGby.jmx		Sum of profit in all stores over a day, grouped by store.
+
+# Range / Join / Group / SecondaryIndex
+TBD.jmx					Number of items over 7 day window by store, by item.
+
+# Range / Join / NoGroup / NoIndex
+
+# Range / Join / NoGroup / PrimaryIndex
+Phoenix_StoreDayAggNoGby.jmx		Sum of profit in a store over a day's interval.
+
+# Range / Join / NoGroup / SecondaryIndex
+TBD.jmx					Number of items over 7 day window by store.
+
+# Range / NoJoin / Group / NoIndex
+
+# Range / NoJoin / Group / PrimaryIndex
+
+# Range / NoJoin / Group / SecondaryIndex
+
+# Range / NoJoin / NoGroup / NoIndex
+
+# Range / NoJoin / NoGroup / PrimaryIndex
+Phoenix_AggTicket.jmx		Sum of net paid by ticket number.
+
+# Range / NoJoin / NoGroup / SecondaryIndex
+
+# Point / Join / Group / NoIndex
+
+# Point / Join / Group / PrimaryIndex
+
+# Point / Join / Group / SecondaryIndex
+
+# Point / Join / NoGroup / NoIndex
+
+# Point / Join / NoGroup / PrimaryIndex
+
+# Point / Join / NoGroup / SecondaryIndex
+
+# Point / NoJoin / Group / NoIndex
+
+# Point / NoJoin / Group / PrimaryIndex
+
+# Point / NoJoin / Group / SecondaryIndex
+
+# Point / NoJoin / NoGroup / NoIndex
+
+# Point / NoJoin / NoGroup / PrimaryIndex
+Phoenix_Purepoint.jmx		Select * based on item and ticket (The PK)
+Phoenix_Semipoint1.jmx		Select * based on item and store (First half of the PK)
+Phoenix_Semipoint2.jmx		Select * based on ticket and store (Last half of the PK)
+
+# Point / NoJoin / NoGroup / SecondaryIndex
+
