@@ -1,0 +1,1 @@
+alter 'STORE_SALES', { NAME => '0', KEEP_DELETED_CELLS => 'false' }

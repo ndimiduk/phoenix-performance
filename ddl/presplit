@@ -1,0 +1,26 @@
+SLEEP_TIME=20
+LONG_SLEEP_TIME=30
+split 'STORE_SALES'
+sleep(SLEEP_TIME)
+split 'STORE_SALES'
+sleep(SLEEP_TIME)
+split 'STORE_SALES'
+sleep(SLEEP_TIME)
+split 'STORE_SALES'
+sleep(SLEEP_TIME)
+split 'STORE_SALES'
+sleep(LONG_SLEEP_TIME)
+balancer
+sleep(LONG_SLEEP_TIME)
+split 'STORE_SALES'
+sleep(LONG_SLEEP_TIME)
+balancer
+sleep(LONG_SLEEP_TIME)
+split 'STORE_SALES'
+sleep(LONG_SLEEP_TIME)
+balancer
+sleep(LONG_SLEEP_TIME)
+split 'STORE_SALES'
+sleep(LONG_SLEEP_TIME)
+balancer
+sleep(LONG_SLEEP_TIME)
