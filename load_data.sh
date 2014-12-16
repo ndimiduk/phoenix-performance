@@ -3,10 +3,8 @@
 # Use the Phoenix bulk loader to load data.
 # Data needs to have been generated using generate_data.sh prior to this step.
 
-PSQL=phoenix/bin/psql.py
 PSQL=/usr/hdp/current/phoenix-client/bin/psql.py
 
-CLIENT=phoenix-4.2.0-client.jar
 CLIENT=/usr/hdp/current/phoenix-client/phoenix-client.jar
 
 function usage {
@@ -32,11 +30,25 @@ fi
 echo "Creating tables in Phoenix"
 ${PSQL} ${ZOOKEEPER} ddl/CreateTables.sql
 
-# Bulk load the tables.
+# Pre-split STORE_SALES 128 ways.
+echo "Pre-splitting STORE_SALES"
 
-# Variables we need.
-HADOOP_COMPAT=$(ls hbase-hadoop-compat*.jar)
-HADOOP2_COMPAT=$(ls hbase-hadoop2-compat*.jar)
+# Ensure the table does not keep deleted records.
+cat ddl/disableKeepDeleted | hbase shell
+
+# Load some data so we can split the table.
+${PSQL} -t STORE_SALES ${ZOOKEEPER} ddl/50kRecords.csv
+
+# Run the split and balancer
+cat ddl/presplit | hbase shell
+
+# Delete the data we added
+${PSQL} -t STORE_SALES ${ZOOKEEPER} ddl/DeleteFromStoreSales.sql
+
+# Run a major compaction
+cat ddl/majorCompactStoreSales | hbase shell
+
+# Bulk load the tables.
 HADOOP_COMPAT=/usr/hdp/current/hbase-client/lib/hbase-hadoop-compat.jar
 HADOOP2_COMPAT=/usr/hdp/current/hbase-client/lib/hbase-hadoop2-compat.jar
 export LIBJARS=$HADOOP_COMPAT,$HADOOP2_COMPAT
