@@ -93,7 +93,7 @@ select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
               <subresults>false</subresults>
               <responseData>false</responseData>
               <samplerData>true</samplerData>
-              <xml>true</xml>
+              <xml>false</xml>
               <fieldNames>true</fieldNames>
               <responseHeaders>false</responseHeaders>
               <requestHeaders>false</requestHeaders>
@@ -103,7 +103,7 @@ select * from store_sales where ss_ticket_number=? and ss_wholesale_cost=?
               <bytes>true</bytes>
             </value>
           </objProp>
-          <stringProp name="filename">output.xml</stringProp>
+          <stringProp name="filename">output.csv</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
