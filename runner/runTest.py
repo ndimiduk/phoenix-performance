@@ -3,12 +3,23 @@
 import getopt
 import os
 import re
+import signal
 import subprocess
 import sys
 import time
 
 DEBUG = 1
-TESTHOSTS = "../clienthosts"
+TESTHOSTS    = "../clienthosts"
+CLUSTERHOSTS = "../clusterhosts"
+
+def fullShutdown(rsp, cp):
+	for p in [rsp, cp]:
+		try:
+			p.terminate()
+			sleep(0.25)
+			p.kill()
+		except:
+			pass
 
 def runCommand(command, error, background=False):
 	if DEBUG:
@@ -47,8 +58,14 @@ def gatherClientStats():
 	cleanupLocal = 'rm -f sar.txt'
 	runCommand(cleanupLocal, "Cleanup failed")
 
-	clientScript = 'python monitorCluster.py > sar.txt'
-	p = runCommand(clientScript, "Failed to execute cluster stat gatherer", background=True)
+	# Start close to a 5s boundary.
+	sometime = (int(time.time() / 5) * 5) + 5 - time.time()
+	time.sleep(sometime)
+
+	# Launch the command.
+	sarCommand = "sar -d -n DEV -u -q -r -S 5 > sar.txt"
+	sarCommand = 'pdsh -w ^' + CLUSTERHOSTS + ' ' + sarCommand
+	p = runCommand(sarCommand, "Failed to run sar", background=True)
 	return p
 
 def gatherRegionServerStats(hmaster):
@@ -126,8 +143,7 @@ def main():
 		time.sleep(5)
 
 	# Shut down collectors.
-	rsp.terminate()
-	cp.terminate()
+	fullShutdown(rsp, cp)
 
 	# Retrieve and analyze the output.
 	analyzeOutput()
