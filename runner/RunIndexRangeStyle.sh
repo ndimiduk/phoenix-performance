@@ -1,7 +1,10 @@
 #!/bin/sh
 
+mydir="$(dirname "$0")"
+source $mydir/ClusterProfile.sh
+
 # Sanity checking.
-if [ X"$0" = "X" ]; then
+if [ X"$1" = "X" ]; then
 	echo "Usage: $0 [JMX Path]"
 	exit 1
 fi
@@ -17,4 +20,4 @@ python runTest.py \
 	-v VAR_NUM_THREADS=4 \
 	-v VAR_RAMP_TIME=1 \
 	-v VAR_POOL_MAX=4 \
-	-v VAR_ZOOKEEPER_QUORUM=cluster1:2181:/hbase-unsecure
+	-v VAR_ZOOKEEPER_QUORUM=${ZOOKEEPER_ENDPOINT}
