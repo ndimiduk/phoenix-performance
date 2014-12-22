@@ -32,7 +32,8 @@ fi
 
 # Copy to our test machines.
 BASEDIR=/tmp/phoenix-performance
-echo "Deploying JMeter to all hosts specified in testshosts"
+echo "Deploying JMeter to hosts defined in testhosts:"
+cat testhosts
 pdsh -w ^testhosts "mkdir -p $BASEDIR"
 pdcp -w ^testhosts $FILE $BASEDIR
 pdsh -w ^testhosts "cd $BASEDIR; tar -xzf $FILE"
