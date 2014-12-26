@@ -33,8 +33,8 @@ fi
 # Copy to our test machines.
 BASEDIR=/tmp/phoenix-performance
 echo "Deploying JMeter to hosts defined in testhosts:"
-cat testhosts
-pdsh -w ^testhosts "mkdir -p $BASEDIR"
-pdcp -w ^testhosts $FILE $BASEDIR
-pdsh -w ^testhosts "cd $BASEDIR; tar -xzf $FILE"
-pdcp -w ^testhosts phoenix*client.jar $BASEDIR/apache-jmeter-*/lib
+cat clienthosts
+pdsh -w ^clienthosts "mkdir -p $BASEDIR"
+pdcp -w ^clienthosts $FILE $BASEDIR
+pdsh -w ^clienthosts "cd $BASEDIR; tar -xzf $FILE"
+pdcp -w ^clienthosts phoenix*client.jar $BASEDIR/apache-jmeter-*/lib
