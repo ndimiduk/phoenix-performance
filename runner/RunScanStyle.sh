@@ -13,8 +13,13 @@ if [ ! -f $1 ]; then
 	exit 1
 fi
 
+CARBONARG=""
+if [ X"$CARBON" != "X" ]; then
+	CARBONARG="-c $CARBON"
+fi
+
 # Semi point lookups.
-python runTest.py \
+python runTest.py $CARBONARG \
 	-i $1 \
 	-v VAR_REQUESTS_PER_THREAD=3 \
 	-v VAR_NUM_THREADS=4 \

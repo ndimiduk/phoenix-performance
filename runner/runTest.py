@@ -77,28 +77,33 @@ def gatherRegionServerStats(hmaster):
 	p = runCommand(gatherScript, "Failed to execute hbase stat gatherer", background=True)
 	return p
 
-def analyzeOutput():
+def analyzeOutput(carbon):
 	# Bring the various output files local.
 	bringFiles = 'rpdcp -w ^' + TESTHOSTS + ' output.* .'
 	runCommand(bringFiles, "Failed to retrieve JMeter results")
 
 	# Run the analysis.
 	analyze = "python analyze.py"
+	if carbon:
+		analyze = "%s -c %s" % (analyze, carbon)
 	runCommand(analyze, "Analyze command failed")
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "i:m:t:v:", ["help", "output="])
+		opts, args = getopt.getopt(sys.argv[1:], "c:i:m:t:v:", ["help", "output="])
 	except getopt.GetoptError as err:
 		print str(err)
 		sys.exit(2)
 	input = None
 	output = "output.csv"
 	hmaster = None
+	carbon = None
 	variables = []
 	for o, a in opts:
 		if o == "-i":
 			input = a
+		elif o == "-c":
+			carbon = a
 		elif o == "-m":
 			hmaster = a
 		elif o == "-t":
@@ -146,7 +151,7 @@ def main():
 	fullShutdown(rsp, cp)
 
 	# Retrieve and analyze the output.
-	analyzeOutput()
+	analyzeOutput(carbon)
 
 if __name__ == "__main__":
 	main()
