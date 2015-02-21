@@ -12,8 +12,8 @@ DEBUG = 1
 TESTHOSTS    = "../clienthosts"
 CLUSTERHOSTS = "../clusterhosts"
 
-def fullShutdown(rsp, cp):
-	for p in [rsp, cp]:
+def fullShutdown(*args):
+	for p in args:
 		try:
 			p.terminate()
 			sleep(0.25)
@@ -23,17 +23,19 @@ def fullShutdown(rsp, cp):
 
 def runCommand(command, error, background=False):
 	if DEBUG:
-		print command
+		print "> %s" % command
 	if background:
 		ret = subprocess.Popen(command, shell=True)
 		return ret
 	else:
-		ret = os.system(command)
+                ret = subprocess.call(command, shell=True)
 		if ret != 0:
 			assert False, error
 		return ret
 
 def runJmeter():
+        if DEBUG:
+                print "runJmeter()"
 	# See if JMeter is properly deployed everywhere.
 	testJmeter = 'pdsh -S -w ^' + TESTHOSTS + ' "test -e /tmp/phoenix-performance/apache-jmeter*/lib/phoenix*.jar"'
 	runCommand(testJmeter, "JMeter is not properly deployed on all nodes")
@@ -54,6 +56,8 @@ def runJmeter():
 	return p
 
 def gatherClientStats():
+        if DEBUG:
+                print "gatherClientStats()"
 	# Clean up the last run.
 	cleanupLocal = 'rm -f sar.txt'
 	runCommand(cleanupLocal, "Cleanup failed")
@@ -69,6 +73,8 @@ def gatherClientStats():
 	return p
 
 def gatherRegionServerStats(hmaster):
+        if DEBUG:
+                print "gatherRegionServerStats(%s)" % hmaster
 	# Clean up the last run.
 	cleanupLocal = 'rm -f RegionServerStats.csv'
 	runCommand(cleanupLocal, "Cleanup failed")
@@ -78,6 +84,8 @@ def gatherRegionServerStats(hmaster):
 	return p
 
 def analyzeOutput(carbon):
+        if DEBUG:
+                print "analyzeOutput(%s)" % carbon
 	# Bring the various output files local.
 	bringFiles = 'rpdcp -w ^' + TESTHOSTS + ' output.* .'
 	runCommand(bringFiles, "Failed to retrieve JMeter results")
@@ -140,15 +148,16 @@ def main():
 	jp = runJmeter()
 
 	# Gather stats while the test runs.
-	rsp = gatherRegionServerStats(hmaster)
-	cp = gatherClientStats()
+        tasks = []
+	#tasks.append(gatherRegionServerStats(hmaster))
+	tasks.append(gatherClientStats())
 
 	# Gather client and server stats while we wait for the JMeter test to finish.
 	while jp.poll() == None:
 		time.sleep(5)
 
 	# Shut down collectors.
-	fullShutdown(rsp, cp)
+	fullShutdown(*tasks)
 
 	# Retrieve and analyze the output.
 	analyzeOutput(carbon)

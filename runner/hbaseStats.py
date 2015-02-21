@@ -303,6 +303,7 @@ def main():
 	while True:
 		# Wait for the boundary time.
 		sometime = (int(time.time() / boundary) * boundary) + boundary - time.time()
+                print "sleeping for %s" % sometime
 		time.sleep(sometime)
 
 		# Poll all regionservers (serially)

@@ -1,6 +1,7 @@
 import xml.parsers.expat
 import csv
 import numpy
+from scipy import stats
 import getopt
 import glob
 import re
@@ -32,10 +33,10 @@ def outputMeasure(name, values, totalReq, failRatio):
 	output.append(numpy.min(nv))
 	output.append(numpy.max(nv))
 	output.append(numpy.median(nv))
-	output.append(numpy.percentile(nv, 90))
-	output.append(numpy.percentile(nv, 95))
-	output.append(numpy.percentile(nv, 99))
-	output.append(numpy.percentile(nv, 99.9))
+	output.append(stats.scoreatpercentile(nv, 90))
+	output.append(stats.scoreatpercentile(nv, 95))
+	output.append(stats.scoreatpercentile(nv, 99))
+	output.append(stats.scoreatpercentile(nv, 99.9))
 	output.append(totalReq)
 	output.append(failRatio)
 	output = [ str(x) for x in output ]
