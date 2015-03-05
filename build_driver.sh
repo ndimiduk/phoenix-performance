@@ -3,7 +3,7 @@
 # to make it compatible with JMeter.
 
 BRANCH=4.2
-TAG=v4.2.0
+TAG=v4.2.2
 
 # Check for all the stuff I need to function.
 for f in javac; do
@@ -59,5 +59,5 @@ echo "Building Phoenix Client"
 
 # Bring some JARs into the top level directory.
 cp phoenix/phoenix-assembly/target/phoenix*client.jar .
-tar --strip-components=2 -zxf phoenix/phoenix-assembly/target/phoenix-4.2.0.tar.gz '*-compat-*'
+tar --strip-components=2 -zxf phoenix/phoenix-assembly/target/phoenix-4.2.2.tar.gz '*-compat-*'
 echo "Driver built and copied to base directory."

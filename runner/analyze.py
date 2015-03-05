@@ -78,17 +78,7 @@ def process():
 	control_chars = ''.join(map(unichr, [38] + range(127,256)))
 	control_char_re = re.compile('[%s]' % re.escape(control_chars))
 
-	csvs = glob.glob("output.csv.*")
-	xmls = glob.glob("output.xml.*")
-
-	for xml in xmls:
-		with open(xml) as fd:
-			text = fd.read()
-			fd.close()
-			stripped = control_char_re.sub('X', text)
-			p = xml.parsers.expat.ParserCreate()
-			p.StartElementHandler = start_element
-			p.Parse(stripped)
+	csvs = [x for x in glob.glob("*/output.csv") if x[0].isdigit()]
 
 	for csvf in csvs:
 		with open(csvf) as fd:

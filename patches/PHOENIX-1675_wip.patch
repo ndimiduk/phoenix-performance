@@ -1,0 +1,95 @@
+diff --git a/phoenix-core/src/main/java/org/apache/phoenix/query/BaseQueryServicesImpl.java b/phoenix-core/src/main/java/org/apache/phoenix/query/BaseQueryServicesImpl.java
+index 73cc3c2..c79aba1 100644
+--- a/phoenix-core/src/main/java/org/apache/phoenix/query/BaseQueryServicesImpl.java
++++ b/phoenix-core/src/main/java/org/apache/phoenix/query/BaseQueryServicesImpl.java
+@@ -17,6 +17,7 @@
+  */
+ package org.apache.phoenix.query;
+ 
++import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.ThreadPoolExecutor;
+ 
+ import org.apache.phoenix.job.JobManager;
+@@ -25,6 +26,8 @@ import org.apache.phoenix.memory.MemoryManager;
+ import org.apache.phoenix.optimize.QueryOptimizer;
+ import org.apache.phoenix.util.ReadOnlyProps;
+ 
++import com.google.common.util.concurrent.MoreExecutors;
++
+ 
+ 
+ /**
+@@ -39,6 +42,7 @@ public abstract class BaseQueryServicesImpl implements QueryServices {
+     private final MemoryManager memoryManager;
+     private final ReadOnlyProps props;
+     private final QueryOptimizer queryOptimizer;
++    private final ExecutorService directExecutor;
+     
+     public BaseQueryServicesImpl(ReadOnlyProps defaultProps, QueryServicesOptions options) {
+         this.executor =  JobManager.createThreadPoolExec(
+@@ -50,6 +54,12 @@ public abstract class BaseQueryServicesImpl implements QueryServices {
+                 options.getMaxMemoryWaitMs());
+         this.props = options.getProps(defaultProps);
+         this.queryOptimizer = new QueryOptimizer(this);
++        this.directExecutor = MoreExecutors.sameThreadExecutor();
++    }
++    
++    @Override
++    public ExecutorService getDirectExecutor() {
++        return directExecutor;
+     }
+     
+     @Override
+diff --git a/phoenix-core/src/main/java/org/apache/phoenix/query/ConnectionQueryServicesImpl.java b/phoenix-core/src/main/java/org/apache/phoenix/query/ConnectionQueryServicesImpl.java
+index 97efc43..5c4985c 100644
+--- a/phoenix-core/src/main/java/org/apache/phoenix/query/ConnectionQueryServicesImpl.java
++++ b/phoenix-core/src/main/java/org/apache/phoenix/query/ConnectionQueryServicesImpl.java
+@@ -275,7 +275,7 @@ public class ConnectionQueryServicesImpl extends DelegateQueryServices implement
+     @Override
+     public HTableInterface getTable(byte[] tableName) throws SQLException {
+         try {
+-            return HBaseFactoryProvider.getHTableFactory().getTable(tableName, connection, getExecutor());
++            return HBaseFactoryProvider.getHTableFactory().getTable(tableName, connection, getDirectExecutor());
+         } catch (org.apache.hadoop.hbase.TableNotFoundException e) {
+             byte[][] schemaAndTableName = new byte[2][];
+             SchemaUtil.getVarChars(tableName, schemaAndTableName);
+diff --git a/phoenix-core/src/main/java/org/apache/phoenix/query/DelegateQueryServices.java b/phoenix-core/src/main/java/org/apache/phoenix/query/DelegateQueryServices.java
+index e58aa5f..5b011e0 100644
+--- a/phoenix-core/src/main/java/org/apache/phoenix/query/DelegateQueryServices.java
++++ b/phoenix-core/src/main/java/org/apache/phoenix/query/DelegateQueryServices.java
+@@ -18,6 +18,7 @@
+ package org.apache.phoenix.query;
+ 
+ import java.sql.SQLException;
++import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.ThreadPoolExecutor;
+ 
+ import org.apache.phoenix.memory.MemoryManager;
+@@ -69,4 +70,9 @@ public class DelegateQueryServices implements QueryServices {
+     public QueryOptimizer getOptimizer() {
+         return parent.getOptimizer();
+     }
++
++    @Override
++    public ExecutorService getDirectExecutor() {
++        return parent.getDirectExecutor();
++    }
+ }
+diff --git a/phoenix-core/src/main/java/org/apache/phoenix/query/QueryServices.java b/phoenix-core/src/main/java/org/apache/phoenix/query/QueryServices.java
+index ce9016d..9c8154f 100644
+--- a/phoenix-core/src/main/java/org/apache/phoenix/query/QueryServices.java
++++ b/phoenix-core/src/main/java/org/apache/phoenix/query/QueryServices.java
+@@ -17,6 +17,7 @@
+  */
+ package org.apache.phoenix.query;
+ 
++import java.util.concurrent.ExecutorService;
+ import java.util.concurrent.ThreadPoolExecutor;
+ 
+ import org.apache.http.annotation.Immutable;
+@@ -168,4 +169,5 @@ public interface QueryServices extends SQLCloseable {
+      * Get query optimizer used to choose the best query plan
+      */
+     public QueryOptimizer getOptimizer();
++    ExecutorService getDirectExecutor();
+ }
